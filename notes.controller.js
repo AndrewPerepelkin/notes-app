@@ -6,7 +6,6 @@ const notesPath = path.join(__dirname, 'db.json')
 
 async function addNote(title) {
   const notes = await getNotes()
-  console.log(notes);
   const note = {
     title,
     id: Date.now().toString()
@@ -14,7 +13,7 @@ async function addNote(title) {
 
   notes.push(note)
   await fs.writeFile(notesPath, JSON.stringify(notes))
-  console.log(chalk.bgGreenBright(`Note: "${note.title}" was added`))
+  console.log(chalk.bgGreen(`Note: "${note.title}" was added`))
 }
 
 async function getNotes() {
@@ -32,6 +31,13 @@ async function printNotes() {
   })
 }
 
+async function removeNote(id) {
+  const notes = await getNotes()
+  const filteredNotes = notes.filter(note => note.id !== id)
+  await fs.writeFile(notesPath, JSON.stringify(filteredNotes))
+  console.log(chalk.bgRedBright(`Note with id: "${id}" was removed`))
+}
+
 module.exports = {
-  addNote, printNotes
+  addNote, printNotes, removeNote
 }
